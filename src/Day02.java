@@ -18,7 +18,7 @@ public class Day02 {
             while (scanner.hasNext()) {
                 var line = scanner.nextLine();
                 var oppo = Play.fromChar(line.charAt(0));
-                var mypl = Play.fromChar(line.charAt(2));
+                var mypl = ExpectedEnd.fromChar(line.charAt(2)).toEndAsExpected(oppo);
                 matches.add(new Match(oppo, mypl));
             }
             return matches;
@@ -34,6 +34,36 @@ record Match(Play opponent, Play myplay) {
         return myplay.points() + (myplay.beats(opponent) ? 6 : myplay == opponent ? 3 : 0);
     }
 };
+
+enum ExpectedEnd {
+    WIN, LOSE, DRAW;
+
+    public static ExpectedEnd fromChar(char c) {
+        switch (c) {
+            case 'Z':
+                return WIN;
+            case 'X':
+                return LOSE;
+            case 'Y':
+                return DRAW;
+            default:
+                throw new IllegalArgumentException("Invalid character: " + c);
+        }
+    }
+
+    public Play toEndAsExpected(Play otherPlay) {
+        switch (this) {
+            case WIN:
+                return otherPlay.whoBeats();
+            case LOSE:
+                return otherPlay.losesTo();
+            case DRAW:
+                return otherPlay;
+            default:
+                return null;
+        }
+    }
+}
 
 enum Play {
     ROCK(1), PAPER(2), SCISSORS(3);
@@ -51,13 +81,10 @@ enum Play {
     public static Play fromChar(char c) {
         switch (c) {
             case 'A':
-            case 'X':
                 return ROCK;
             case 'B':
-            case 'Y':
                 return PAPER;
             case 'C':
-            case 'Z':
                 return SCISSORS;
             default:
                 throw new IllegalArgumentException("Invalid character: " + c);
@@ -74,6 +101,32 @@ enum Play {
                 return other == PAPER;
             default:
                 return false;
+        }
+    }
+
+    public Play whoBeats() {
+        switch (this) {
+            case ROCK:
+                return PAPER;
+            case PAPER:
+                return SCISSORS;
+            case SCISSORS:
+                return ROCK;
+            default:
+                return null;
+        }
+    }
+
+    public Play losesTo() {
+        switch (this) {
+            case ROCK:
+                return SCISSORS;
+            case PAPER:
+                return ROCK;
+            case SCISSORS:
+                return PAPER;
+            default:
+                return null;
         }
     }
 
