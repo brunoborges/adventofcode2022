@@ -30,6 +30,8 @@ public class Day05 {
 		System.out.println(String.join(" ", message));
 	}
 
+	static List<Crate> bufferCrates = new ArrayList<>(20);
+
 	static void executeOperations() {
 		for (var operation : operations) {
 			var quantity = operation.quantity;
@@ -39,10 +41,11 @@ public class Day05 {
 			var fromStack = crateStacks.get(from - 1);
 			var toStack = crateStacks.get(to - 1);
 
-			var crates = new ArrayList<Crate>(fromStack.crates.subList(0, quantity));
-			fromStack.crates.removeAll(crates);
-			Collections.reverse(crates);
-			toStack.crates.addAll(0, crates);
+			bufferCrates.addAll(fromStack.crates.subList(0, quantity));
+			fromStack.crates.removeAll(bufferCrates);
+			Collections.reverse(bufferCrates);
+			toStack.crates.addAll(0, bufferCrates);
+			bufferCrates.clear();
 
 			crateStacks.forEach(System.out::println);
 		}
