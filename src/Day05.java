@@ -43,7 +43,7 @@ public class Day05 {
 
 			bufferCrates.addAll(fromStack.crates.subList(0, quantity));
 			fromStack.crates.removeAll(bufferCrates);
-			Collections.reverse(bufferCrates);
+			// Collections.reverse(bufferCrates); // Part 2 asks to keep order, so.. commented this line
 			toStack.crates.addAll(0, bufferCrates);
 			bufferCrates.clear();
 
