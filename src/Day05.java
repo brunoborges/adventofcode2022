@@ -15,7 +15,7 @@ public class Day05 {
 		var blocksFromFile = readInputArrayFromFile();
 
 		var crateStackConfig = blocksFromFile[0];
-		parseCrates(crateStackConfig);
+		parseCrates(crateStackConfig);	
 		crateStacks.forEach(System.out::println);
 
 		var rawOperations = blocksFromFile[1];
